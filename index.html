@@ -98,6 +98,7 @@ p{margin:0 0 1em}
 .fallback .box{fill:rgba(63,217,194,.06);stroke:var(--aqua);stroke-width:2.5}
 .fallback .core{fill:rgba(223,247,243,.12);stroke:#DFF7F3;stroke-width:2}
 .fallback .lbl{font:500 13px var(--font);fill:#CFE3E6}
+@media (max-width:759px){.fallback .lbl{display:none}}
 
 /* bendros sekcijos */
 .section{padding:84px 0}
@@ -233,6 +234,30 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 @media (min-width:760px){.contact{grid-template-columns:1fr 1fr;gap:18px}}
 .foot{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--ink-2);font-size:.9rem}
 .foot .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ATLIKTI OBJEKTAI: rėmeliai nuotraukoms, kol kas su piešiniais */
+.objs{display:grid;gap:16px}
+.obj{margin:0}
+.obj-frame{position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,var(--petrol-2),var(--petrol) 70%);box-shadow:inset 0 0 0 1px rgba(63,217,194,.28)}
+.obj-art{position:absolute;inset:8% 10%;width:80%;height:84%;fill:none;stroke:var(--aqua);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.obj-art .air{stroke:var(--aqua-2);stroke-width:1.6;opacity:.55}
+.obj-chip{position:absolute;left:12px;bottom:12px;font:500 .74rem/1.2 var(--font);color:var(--petrol-3);background:var(--aqua);padding:6px 10px;border-radius:999px}
+.obj figcaption{padding:12px 4px 0}
+.obj figcaption b{display:block;font-family:var(--display);font-weight:800;font-size:1.3rem;letter-spacing:-.02em;color:var(--petrol)}
+.obj figcaption span{display:block;color:var(--ink-2);margin-top:2px}
+@media (min-width:760px){.objs{grid-template-columns:repeat(3,1fr);gap:20px}}
+
+/* KAS LEMIA KAINĄ: penki veiksniai, be sumų */
+.kaina-grid{display:grid;gap:26px}
+.kaina-grid .btn{margin-top:4px}
+.factors{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.factors li{position:relative;padding:18px 0 18px 30px;border-bottom:1px solid var(--line)}
+.factors li::before{content:"";position:absolute;left:0;top:27px;width:14px;height:6px;border-radius:3px;background:var(--aqua)}
+.factors h3{font-size:1.15rem;margin-bottom:4px;color:var(--petrol)}
+.factors p{margin:0;color:var(--ink-2)}
+.r-link{margin:0;font-size:.9rem}
+.r-link a{color:var(--aqua);text-decoration:underline;text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
+@media (min-width:900px){.kaina-grid{grid-template-columns:5fr 7fr;gap:48px;align-items:start}}
 </style>
 </head>
 <body>
@@ -365,6 +390,55 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   </div>
 </section>
 
+<section class="section" id="objektai">
+  <div class="wrap">
+    <p class="eyebrow dark rv">Atlikti objektai</p>
+    <h2 class="sec-title rv">Butai, namai ir biurai.</h2>
+    <p class="sec-sub rv">Trys objektų tipai, su kuriais dirbame. Vietoje piešinių čia atsiras jūsų objektų nuotraukos.</p>
+    <div class="objs">
+      <figure class="obj rv" style="--i:0">
+        <div class="obj-frame" aria-hidden="true">
+          <svg class="obj-art" viewBox="0 0 200 150" focusable="false">
+            <path class="air" d="M12 34h48a7 7 0 1 0-7-7"/><path class="air" d="M12 116h40a6 6 0 1 1-6 6"/>
+            <rect x="52" y="22" width="96" height="118" rx="3"/>
+            <path d="M52 140h96M64 140v-22h16v22M120 140v-22h16v22"/>
+            <rect x="66" y="34" width="18" height="16" rx="1.5"/><rect x="91" y="34" width="18" height="16" rx="1.5"/><rect x="116" y="34" width="18" height="16" rx="1.5"/>
+            <rect x="66" y="62" width="18" height="16" rx="1.5"/><rect x="91" y="62" width="18" height="16" rx="1.5"/><rect x="116" y="62" width="18" height="16" rx="1.5"/>
+            <rect x="66" y="90" width="18" height="16" rx="1.5"/><rect x="91" y="90" width="18" height="16" rx="1.5"/><rect x="116" y="90" width="18" height="16" rx="1.5"/>
+            <path d="M40 140h120"/>
+          </svg>
+          <span class="obj-chip">Čia bus jūsų objektų nuotraukos</span>
+        </div>
+        <figcaption><b>Butas</b><span>Rekuperacija ir vėdinimas daugiabutyje</span></figcaption>
+      </figure>
+      <figure class="obj rv" style="--i:1">
+        <div class="obj-frame" aria-hidden="true">
+          <svg class="obj-art" viewBox="0 0 200 150" focusable="false">
+            <path class="air" d="M8 44h40a7 7 0 1 0-7-7"/><path class="air" d="M150 112h40a6 6 0 1 1-6 6"/>
+            <path d="M34 84 100 32l66 52"/><path d="M48 74v66h104V74"/><path d="M128 42v-14h12v24"/>
+            <path d="M88 140v-30h24v30"/><rect x="60" y="88" width="20" height="18" rx="1.5"/><rect x="120" y="88" width="20" height="18" rx="1.5"/>
+            <path d="M24 140h152"/>
+          </svg>
+          <span class="obj-chip">Čia bus jūsų objektų nuotraukos</span>
+        </div>
+        <figcaption><b>Namas</b><span>Rekuperacinė sistema visam namui</span></figcaption>
+      </figure>
+      <figure class="obj rv" style="--i:2">
+        <div class="obj-frame" aria-hidden="true">
+          <svg class="obj-art" viewBox="0 0 200 150" focusable="false">
+            <path class="air" d="M10 60h34a7 7 0 1 0-7-7"/><path class="air" d="M156 96h34a6 6 0 1 1-6 6"/>
+            <rect x="62" y="14" width="76" height="126" rx="3"/>
+            <path d="M74 26h52M74 44h52M74 62h52M74 80h52M74 98h52M74 116h52" stroke-dasharray="14 5"/>
+            <path d="M92 140v-16h16v16M54 140h92"/>
+          </svg>
+          <span class="obj-chip">Čia bus jūsų objektų nuotraukos</span>
+        </div>
+        <figcaption><b>Biuras</b><span>Vėdinimas ir kondicionavimas komercinėse patalpose</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="skaiciuokle">
   <div class="wrap calc-grid">
     <div>
@@ -391,8 +465,27 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
           <a class="btn btn-ghost" id="sms-link" href="sms:+37060600670">SMS</a>
         </div>
         <p class="r-note">Skaičiuojame pagal įprastas vėdinimo projektavimo normas: didesnę iš reikšmių pagal tūrį ir pagal žmonių skaičių. Užklausoje šie skaičiai bus įrašyti automatiškai.</p>
+        <p class="r-link"><a href="#kaina">Kas dar lemia kainą</a></p>
       </div>
     </form>
+  </div>
+</section>
+
+<section class="section" id="kaina">
+  <div class="wrap kaina-grid">
+    <div>
+      <p class="eyebrow dark rv">Kas lemia kainą</p>
+      <h2 class="sec-title rv">Penki dalykai, nuo kurių priklauso sąmata.</h2>
+      <p class="sec-sub rv">Sumų iš anksto nerašome, nes kiekvienas objektas skiriasi. Bet iš karto aišku, kas sąmatą didina, o kas mažina. Pradėkite nuo oro kiekio: jis lemia įrenginio dydį.</p>
+      <a class="btn btn-petrol rv" href="#skaiciuokle">Skaičiuoti oro kiekį</a>
+    </div>
+    <ul class="factors rv">
+      <li><h3>Plotas ir patalpų skaičius</h3><p>Kuo daugiau patalpų reikia vėdinti, tuo daugiau grotelių ir atšakų.</p></li>
+      <li><h3>Ortakių trasos ilgis ir sudėtingumas</h3><p>Ilga trasa, posūkiai ir pertvaros reiškia daugiau darbo ir medžiagų.</p></li>
+      <li><h3>Įrenginio galia</h3><p>Oro kiekis, kurį rodo skaičiuoklė, lemia rekuperatoriaus dydį.</p></li>
+      <li><h3>Naujas ar jau gyvenamas būstas</h3><p>Statybos metu ortakius paslėpti paprasčiau nei jau įrengtame bute.</p></li>
+      <li><h3>Kur montuojamas įrenginys</h3><p>Techninė patalpa, palėpė ar pakabinamos lubos: nuo vietos priklauso ir prieiga priežiūrai.</p></li>
+    </ul>
   </div>
 </section>
 
@@ -413,8 +506,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   <div class="wrap">
     <div class="facts">
       <div class="fact rv" style="--i:0"><b>2005</b><span>metai, nuo kurių dirba įmonė</span></div>
-      <div class="fact rv" style="--i:1"><b>Vilnius</b><span>Pilaitė ir visas miestas</span></div>
-      <div class="fact rv" style="--i:2"><b>IĮ</b><span>individuali įmonė, vienas atsakingas žmogus</span></div>
+      <div class="fact rv" style="--i:1"><b>Vilnius</b><span>Pilaitė</span></div>
+      <div class="fact rv" style="--i:2"><b>3 kryptys</b><span>vėdinimas, rekuperacija, oro kondicionavimas</span></div>
     </div>
   </div>
 </section>
