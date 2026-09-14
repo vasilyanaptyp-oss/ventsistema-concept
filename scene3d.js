@@ -38,7 +38,7 @@ export async function init(box, opts = {}) {
   const glass = new THREE.MeshPhysicalMaterial({ color: 0x1f5f6c, roughness: 0.28, metalness: 0.05, transparent: true, opacity: 0.2, side: THREE.DoubleSide, depthWrite: false });
   const edgeMat = new THREE.LineBasicMaterial({ color: 0x3fd9c2, transparent: true, opacity: 0.9 });
   const edgeSoft = new THREE.LineBasicMaterial({ color: 0x3fd9c2, transparent: true, opacity: 0.22 });
-  const plateMat = new THREE.MeshStandardMaterial({ color: 0xc9eaec, roughness: 0.3, metalness: 0.75, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+  const plateMat = new THREE.MeshStandardMaterial({ color: 0xc9eaec, roughness: 0.3, metalness: 0.75, transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false });
   const metal = new THREE.MeshStandardMaterial({ color: 0xa7bfc4, roughness: 0.35, metalness: 0.9 });
   const dark = new THREE.MeshStandardMaterial({ color: 0x17383f, roughness: 0.55, metalness: 0.3 });
 
