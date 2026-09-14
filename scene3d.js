@@ -56,12 +56,13 @@ export async function init(box, opts = {}) {
   unit.add(plates);
   const core = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(0.31, 0.31, 0.34)), new THREE.LineBasicMaterial({ color: 0xdff7f3, transparent: true, opacity: 0.55 }));
   core.rotation.z = Math.PI / 4; unit.add(core);
-  /* keturi ortakių atvamzdžiai */
+  /* keturi ortakių atvamzdžiai: lauko oras įeina kairėje viršuje ir po šilumokaičio išeina dešinėje apačioje (į kambarius);
+     panaudotas oras įeina dešinėje viršuje ir išeina kairėje apačioje (lauk). Srautai kryžiuojasi rombe 90° kampu. */
   const portGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.14, 24); portGeo.rotateZ(Math.PI / 2);
-  [[-W / 2 - 0.06, 0.15], [W / 2 + 0.06, 0.15], [W / 2 + 0.06, -0.15], [-W / 2 - 0.06, -0.15]].forEach(([x, y]) => {
+  [[-W / 2 - 0.06, 0.15], [W / 2 + 0.06, -0.15], [W / 2 + 0.06, 0.15], [-W / 2 - 0.06, -0.15]].forEach(([x, y]) => {
     const p = new THREE.Mesh(portGeo, metal); p.position.set(x, y, 0); unit.add(p);
   });
-  /* du ventiliatoriai: tiekimo (dešinėje viršuje) ir ištraukimo (kairėje apačioje) */
+  /* du ventiliatoriai po šilumokaičio: tiekimo (dešinėje apačioje) ir ištraukimo (kairėje apačioje) */
   const fans = [];
   const mkFan = (x, y) => {
     const g = new THREE.Group();
@@ -73,17 +74,26 @@ export async function init(box, opts = {}) {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.008, 8, 36), dark); ring.rotation.y = Math.PI / 2; g.add(ring);
     g.position.set(x, y, 0); unit.add(g); fans.push(g);
   };
-  mkFan(0.36, 0.15); mkFan(-0.36, -0.15);
+  mkFan(0.36, -0.15); mkFan(-0.36, -0.15);
 
   /* ---- du oro srautai: kelias per šilumokaitį, spalva keičiasi jį praėjus ---- */
   const v = (x, y, z) => new THREE.Vector3(x, y, z);
-  const curveA = new THREE.CatmullRomCurve3([v(-1.55, 0.16, 0.03), v(-0.62, 0.15, 0.03), v(-0.3, 0.12, 0), v(0, 0, 0), v(0.3, 0.12, 0), v(0.62, 0.15, 0.03), v(1.55, 0.16, 0.03)]);
-  const curveB = new THREE.CatmullRomCurve3([v(1.55, -0.16, -0.03), v(0.62, -0.15, -0.03), v(0.3, -0.12, 0), v(0, 0, 0), v(-0.3, -0.12, 0), v(-0.62, -0.15, -0.03), v(-1.55, -0.16, -0.03)]);
+  /* šviežias: kairė viršus → per rombą įstrižai žemyn → dešinė apačia; panaudotas: dešinė viršus → įstrižai žemyn → kairė apačia.
+     Šilumokaityje kryžiuojasi 90° kampu, kiekvienas srautas savo plokštelių tarpuose (z sluoksniai), todėl nesimaišo. */
+  const curveA = new THREE.CatmullRomCurve3([v(-1.55, 0.16, 0), v(-0.62, 0.15, 0), v(-0.3, 0.145, 0), v(-0.13, 0.12, 0), v(0.13, -0.12, 0), v(0.3, -0.145, 0), v(0.62, -0.15, 0), v(1.55, -0.16, 0)]);
+  const curveB = new THREE.CatmullRomCurve3([v(1.55, 0.16, 0), v(0.62, 0.15, 0), v(0.3, 0.145, 0), v(0.13, 0.12, 0), v(-0.13, -0.12, 0), v(-0.3, -0.145, 0), v(-0.62, -0.15, 0), v(-1.55, -0.16, 0)]);
   const sprite = spriteTexture();
   const streams = [];
-  const mkStream = (curve, n, c1, c2) => {
-    const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), t = new Float32Array(n), sp = new Float32Array(n), off = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) { t[i] = Math.random(); sp[i] = 0.09 + Math.random() * 0.1; off[i * 3] = (Math.random() - 0.5) * 0.08; off[i * 3 + 1] = (Math.random() - 0.5) * 0.08; off[i * 3 + 2] = (Math.random() - 0.5) * 0.08; }
+  const gap = 0.32 / (N - 1);
+  const mkStream = (curve, n, c1, c2, odd) => {
+    const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), t = new Float32Array(n), sp = new Float32Array(n), off = new Float32Array(n * 3), zl = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      t[i] = Math.random(); sp[i] = 0.09 + Math.random() * 0.1;
+      off[i * 3] = (Math.random() - 0.5) * 0.08; off[i * 3 + 1] = (Math.random() - 0.5) * 0.08; off[i * 3 + 2] = (Math.random() - 0.5) * 0.006;
+      /* savas plokštelių tarpas: šviežias oras lyginiuose, panaudotas nelyginiuose */
+      const g = 2 * Math.floor(Math.random() * 7) + (odd ? 1 : 0);
+      zl[i] = -0.16 + (g + 0.5) * gap;
+    }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
@@ -95,9 +105,10 @@ export async function init(box, opts = {}) {
         t[i] += sp[i] * dt; if (t[i] > 1) t[i] -= 1;
         const u = t[i];
         curve.getPointAt(u, tmp);
-        /* šilumokaityje srautas susispaudžia į plokšteles */
-        const k = 1 - 0.65 * Math.exp(-Math.pow((u - 0.5) / 0.11, 2));
-        pos[i * 3] = tmp.x + off[i * 3] * k; pos[i * 3 + 1] = tmp.y + off[i * 3 + 1] * k; pos[i * 3 + 2] = tmp.z + off[i * 3 + 2] * k;
+        /* šilumokaityje srautas pasklinda per visą rombo plotį ir išsidėsto savo plokštelių tarpuose; ortakyje vėl susitraukia */
+        const ax = Math.abs(tmp.x);
+        const k = 1 + 1.1 * clamp01((0.3 - ax) / 0.12), s = 0.3 + 0.7 * clamp01((0.38 - ax) / 0.16);
+        pos[i * 3] = tmp.x + off[i * 3] * k; pos[i * 3 + 1] = tmp.y + off[i * 3 + 1] * k; pos[i * 3 + 2] = zl[i] * s + off[i * 3 + 2];
         cc.copy(cA).lerp(cB, clamp01((u - 0.42) / 0.16));
         /* srautų galai išblunka, kad prie drobės krašto nebūtų nupjautų taškų */
         const fade = 1 - clamp01((Math.abs(tmp.x) - 0.95) / 0.5);
@@ -109,8 +120,8 @@ export async function init(box, opts = {}) {
     streams.push({ step, pos });
   };
   const n = mobile ? 320 : 520;
-  mkStream(curveA, n, 0x5ee6d0, 0xffc98a);   /* šviežias: šaltas aqua → sušildytas šiltas */
-  mkStream(curveB, n, 0xff7a59, 0x8fb3bd);   /* panaudotas: šiltas koralas → atvėsęs pilkšvas */
+  mkStream(curveA, n, 0x5ee6d0, 0xffc98a, false);   /* šviežias: šaltas aqua → sušildytas šiltas */
+  mkStream(curveB, n, 0xff7a59, 0x8fb3bd, true);    /* panaudotas: šiltas koralas → atvėsęs pilkšvas */
 
   /* ---- šviesa ---- */
   scene.add(new THREE.HemisphereLight(0xdff7f3, 0x0f2e36, 0.7));
@@ -165,6 +176,9 @@ export async function init(box, opts = {}) {
     mode: '3d', ready: true,
     get running() { return running; },
     get frames() { return frames; },
-    sample() { const p = streams[0].pos; return [p[0], p[1], p[2]]; }
+    sample() { const p = streams[0].pos; return [p[0], p[1], p[2]]; },
+    /* testams: abiejų srautų padėtys ir vieno žingsnio kaina */
+    debug() { return { a: Array.from(streams[0].pos), b: Array.from(streams[1].pos) }; },
+    bench(k) { const t0 = performance.now(); for (let i = 0; i < (k || 60); i++) for (const s of streams) s.step(1 / 60); return (performance.now() - t0) / (k || 60); }
   };
 }
