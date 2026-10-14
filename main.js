@@ -84,8 +84,8 @@
       if (f <= 150) return 'apie 150 m³/h';
       if (f <= 200) return 'apie 200 m³/h';
       if (f <= 250) return 'apie 250 m³/h';
-      if (f <= 350) return 'apie 300–350 m³/h';
-      if (f <= 500) return 'apie 400–500 m³/h';
+      if (f <= 350) return 'apie 300-350 m³/h';
+      if (f <= 500) return 'apie 400-500 m³/h';
       return '500 m³/h ir daugiau';
     };
     var calc = function () {
